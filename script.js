@@ -64,35 +64,29 @@ function playRound(playerSelection, computerSelection) {
 
 
 function game() {
-    let i = 0;
+    let round = 0;
     let score = 0;
     let result = null;
 
-    while (i < 5) {
+    while (round < 5) {
 
         const computerSelection = computerPlay();
-        const playerSelection = prompt(`Round ${i+1}: Enter your selection: Rock, Paper or Scissors`);
-        while (playerSelection == null) {
-         playerSelection = prompt(`Round ${i+1}: Enter your selection: Rock, Paper or Scissors`);
-        }
-        
-        while (typeof (playerSelection) !== String) {
-                 playerSelection = prompt(`Enter a valid selection: Rock, Paper or Scissors`);
-        }
+        let playerSelection = prompt(`Round ${round + 1}: Enter your selection: Rock, Paper or Scissors`);
 
-       while(playerSelection.toUpperCase() !== 'ROCK'|| playerSelection.toUpperCase() !== 'PAPER'|| playerSelection.toUpperCase() !== 'SCISSORS'){
-                             playerSelection = prompt(`Enter a valid selection: Rock, Paper or Scissors`);
-
+        while (playerSelection == '') {
+            playerSelection = prompt(`Round ${round + 1}: Enter your selection: Rock, Paper or Scissors`);
         }
+       
 
         result = playRound(playerSelection, computerSelection);
 
         console.log(result.message);
+        
         if (result.userWin) {
             score += 1;
         }
         if (result.message !== 'Draw') {
-            i += 1;
+            round += 1;
         }
     }
 
