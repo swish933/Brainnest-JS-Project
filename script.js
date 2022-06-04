@@ -71,11 +71,22 @@ function game() {
     while (i < 5) {
 
         const computerSelection = computerPlay();
-        const playerSelection = prompt(`Enter your selection: Rock, Paper or Scissors`);
-        if (playerSelection == null) {
-            return;
+        const playerSelection = prompt(`Round ${i+1}: Enter your selection: Rock, Paper or Scissors`);
+        while (playerSelection == null) {
+         playerSelection = prompt(`Round ${i+1}: Enter your selection: Rock, Paper or Scissors`);
         }
+        
+        while (typeof (playerSelection) !== String) {
+                 playerSelection = prompt(`Enter a valid selection: Rock, Paper or Scissors`);
+        }
+
+       while(playerSelection.toUpperCase() !== 'ROCK'|| playerSelection.toUpperCase() !== 'PAPER'|| playerSelection.toUpperCase() !== 'SCISSORS'){
+                             playerSelection = prompt(`Enter a valid selection: Rock, Paper or Scissors`);
+
+        }
+
         result = playRound(playerSelection, computerSelection);
+
         console.log(result.message);
         if (result.userWin) {
             score += 1;
@@ -86,11 +97,11 @@ function game() {
     }
 
     if (score < 3) {
-        console.log(`You lost to the computer 😢. Your score is ${score}`);
+       alert(`You lost to the computer 😢. Your score is ${score}`);
         return;
     }
 
-    console.log(`You beat the computer!!! 😎 . Your score is ${score}`);
+   alert(`You beat the computer!!! 😎 . Your score is ${score}`);
 }
 
 
