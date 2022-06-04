@@ -41,7 +41,7 @@ function playRound(playerSelection, computerSelection) {
                     message: `You Lose! ${computerSelection} beats ${playerSelection}`, userWin: false
                 };
         }
-    } else {
+    } else if (playerSelection == 'SCISSORS') {
         switch (computerSelection) {
             case `ROCK`:
                 return {
@@ -59,6 +59,12 @@ function playRound(playerSelection, computerSelection) {
                 };
         }
     }
+    else {
+        return {
+            message: "Invalid Input",
+            userWin: false
+        };
+    }
 }
 
 
@@ -74,28 +80,35 @@ function game() {
         let playerSelection = prompt(`Round ${round + 1}: Enter your selection: Rock, Paper or Scissors`);
 
         while (playerSelection == '') {
-            playerSelection = prompt(`Round ${round + 1}: Enter your selection: Rock, Paper or Scissors`);
+            playerSelection = prompt(`Round ${round + 1}: Enter a valid selection: Rock, Paper or Scissors`);
         }
-       
 
         result = playRound(playerSelection, computerSelection);
 
         console.log(result.message);
-        
+
         if (result.userWin) {
             score += 1;
         }
-        if (result.message !== 'Draw') {
+
+        if(result.message == 'Invalid Input'){
+            continue;
+        }
+
+        if (result.message !== 'Draw' || result.message !== 'Invalid Input') {
             round += 1;
         }
+
     }
 
     if (score < 3) {
-       alert(`You lost to the computer 😢. Your score is ${score}`);
+        console.log(`You lost to the computer 😢. Your score is ${score}`);
+        alert(`You lost to the computer 😢. Your score is ${score}`);
         return;
     }
 
-   alert(`You beat the computer!!! 😎 . Your score is ${score}`);
+    console.log(`You beat the computer!!! 😎 . Your score is ${score}`);
+    alert(`You beat the computer!!! 😎 . Your score is ${score}`);
 }
 
 
