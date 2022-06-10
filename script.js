@@ -10,6 +10,8 @@ const score = document.querySelector('.score');
 const playAgain = document.querySelector('.playAgain');
 const retry = document.querySelector('.retry');
 
+const controller = new AbortController();
+
 
 
 function computerPlay() {
@@ -41,6 +43,7 @@ function scoreCheck() {
     
     let resultString = `You ${userScore === 5 ? 'beat' : 'lost to'} the computer!!! ${userScore === 5 ? "😎" : "😢"}.`;
     output.textContent = resultString;
+    controller.abort();
     displayRetry();
 }
 
@@ -137,17 +140,19 @@ function playRound(playerSelection) {
 
 };
 
+
+
 rock.addEventListener('click', (e) => {
     playRound(e.target.value)
-});
+},{signal: controller.signal});
 
 paper.addEventListener('click', (e) => {
     playRound(e.target.value)
-});
+},{signal: controller.signal});
 
 scissors.addEventListener('click', (e) => {
     playRound(e.target.value)
-});
+},{signal: controller.signal});
 
 retry.addEventListener('click', e => {
     window.location.reload();
