@@ -1,115 +1,154 @@
 const hand = ['Rock', 'Paper', 'Scissors'];
+let userScore = 0;
+let computerScore = 0;
+let round = 1;
+const rock = document.querySelector('.rock');
+const paper = document.querySelector('.paper');
+const scissors = document.querySelector('.scissors');
+const output = document.querySelector('.output');
+const score = document.querySelector('.score');
+const playAgain = document.querySelector('.playAgain');
+const retry = document.querySelector('.retry');
+
+
 
 function computerPlay() {
     let random = Math.floor(Math.random() * 3)
     return hand[random];
 }
 
-function playRound(playerSelection, computerSelection) {
+function incrementRound() {
+    round++;
+}
+
+function incrementComputerScore() {
+    ++computerScore;
+}
+
+function incrementUserScore() {
+    ++userScore;
+}
+
+function displayScore() {
+    score.textContent = userScore;
+}
+
+function displayRetry() {
+    playAgain.style.display = 'flex';
+}
+
+function scoreCheck() {
+    
+    let resultString = `You ${userScore === 5 ? 'beat' : 'lost to'} the computer!!! ${userScore === 5 ? "😎" : "😢"}.`;
+    output.textContent = resultString;
+    displayRetry();
+}
+
+function playRound(playerSelection) {
+    let computerSelection = computerPlay().toUpperCase();
     playerSelection = playerSelection.toUpperCase();
-    computerSelection = computerSelection.toUpperCase();
 
-    if (playerSelection == 'ROCK') {
-        switch (computerSelection) {
-            case `ROCK`:
-                return {
-                    message: 'Draw',
-                    userWin: false
-                };
-            case `PAPER`:
-                return {
-                    message: `You Lose! ${computerSelection} beats ${playerSelection}`, userWin: false
-                };
-            case `SCISSORS`:
-                return {
-                    message: `You Win! ${playerSelection} beats ${computerSelection}`, userWin: true
-                };
+        if (playerSelection == 'ROCK') {
+            switch (computerSelection) {
+                case `ROCK`:
+                    output.textContent = `Round: Draw`;
+                    break;
+                case `PAPER`:
+                    incrementComputerScore();
+                    if(userScore===5||computerScore===5)
+                    {
+                        scoreCheck();
+                        return;
+                    }
+                    output.textContent = `You lost that round! ${computerSelection} beats ${playerSelection}`;
+                    incrementRound();
+                    break;
+                case `SCISSORS`:
+                    incrementUserScore();
+                    displayScore();
+                    if(userScore===5||computerScore===5)
+                    {
+                        scoreCheck();
+                        return;
+                    }
+                    output.textContent = `You won that round! ${playerSelection} beats ${computerSelection}`;
+                    incrementRound();
+                    break;
+            }
+        } else if (playerSelection == 'PAPER') {
+            switch (computerSelection) {
+                case `ROCK`:
+                    incrementUserScore();
+                    displayScore();
+                    if(userScore===5||computerScore===5)
+                    {
+                        scoreCheck();
+                        return;
+                    };
+                    output.textContent = `You won that round! ${playerSelection} beats ${computerSelection}`;
+                    incrementRound();
+                    break;
+                case `PAPER`:
+                    output.textContent = `Round: Draw`;
+                    break;
+                case `SCISSORS`:
+                    incrementComputerScore();
+                    if(userScore===5||computerScore===5)
+                    {
+                        scoreCheck();
+                        return;
+                    }
+                    output.textContent = `You lost that round! ${computerSelection} beats ${playerSelection}`;
+                    incrementRound();
+                    break;
+
+            }
+        } else if (playerSelection == 'SCISSORS') {
+            switch (computerSelection) {
+                case `ROCK`:
+                    incrementComputerScore();
+                    if(userScore===5||computerScore===5)
+                    {
+                        scoreCheck();
+                        return;
+                    }
+                    output.textContent = `You lost that round! ${computerSelection} beats ${playerSelection}`;
+                    incrementRound();
+                    break;
+                case `PAPER`:
+                    incrementUserScore();
+                    displayScore();
+                    if(userScore===5||computerScore===5)
+                    {
+                        scoreCheck();
+                        return;
+                    }
+                    output.textContent = `You won that round! ${playerSelection} beats ${computerSelection}`;
+                    incrementRound();
+                    break;
+                case `SCISSORS`:
+                    output.textContent = `Round: Draw`;
+                    break;
+            }
         }
-    } else if (playerSelection == 'PAPER') {
-        switch (computerSelection) {
-            case `ROCK`:
-                return {
-                    message: `You Win! ${playerSelection} beats ${computerSelection}`, userWin: true
-                };
-            case `PAPER`:
-                return {
-                    message: 'Draw',
-                    userWin: false
-                };
-            case `SCISSORS`:
-                return {
-                    message: `You Lose! ${computerSelection} beats ${playerSelection}`, userWin: false
-                };
-        }
-    } else if (playerSelection == 'SCISSORS') {
-        switch (computerSelection) {
-            case `ROCK`:
-                return {
-                    message: `You Lose! ${computerSelection} beats ${playerSelection}`,
-                    userWin: false
-                };
-            case `PAPER`:
-                return {
-                    message: `You Win! ${playerSelection} beats ${computerSelection}`, userWin: true
-                };
-            case `SCISSORS`:
-                return {
-                    message: 'Draw',
-                    userWin: false
-                };
-        }
-    }
-    else {
-        return {
-            message: "Invalid Input",
-            userWin: false
-        };
-    }
-}
-
-
-
-function game() {
-    let round = 0;
-    let score = 0;
-    let result = null;
-
-    while (round < 5) {
-
-        const computerSelection = computerPlay();
-        let playerSelection = prompt(`Round ${round + 1}: Enter your selection: Rock, Paper or Scissors`);
-
-        while (playerSelection == '') {
-            playerSelection = prompt(`Round ${round + 1}: Enter a valid selection: Rock, Paper or Scissors`);
-        }
-
-        result = playRound(playerSelection, computerSelection);
-
-        console.log(result.message);
-
-        if (result.userWin) {
-            score += 1;
-        }
-
-        if(result.message == 'Invalid Input'){
-            continue;
-        }
-
-        if (result.message !== 'Draw' || result.message !== 'Invalid Input') {
-            round += 1;
+        else {
+            output.textContent = 'Please enter a valid input';
         }
 
-    }
+};
 
-    if (score < 3) {
-        console.log(`You lost to the computer 😢. Your score is ${score}`);
-        alert(`You lost to the computer 😢. Your score is ${score}`);
-        return;
-    }
+rock.addEventListener('click', (e) => {
+    playRound(e.target.value)
+});
 
-    console.log(`You beat the computer!!! 😎 . Your score is ${score}`);
-    alert(`You beat the computer!!! 😎 . Your score is ${score}`);
-}
+paper.addEventListener('click', (e) => {
+    playRound(e.target.value)
+});
 
+scissors.addEventListener('click', (e) => {
+    playRound(e.target.value)
+});
 
-game();
+retry.addEventListener('click', e => {
+    window.location.reload();
+})
